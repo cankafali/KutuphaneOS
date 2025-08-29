@@ -1133,6 +1133,7 @@
     <Content Include="Models\Entity\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="docs\index.md" />
     <None Include="Properties\PublishProfiles\LibraryOSMvc - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Models\Entity\Model1.Context.tt">
