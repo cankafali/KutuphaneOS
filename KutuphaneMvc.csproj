@@ -1134,6 +1134,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
     <Content Include="docs\index.md" />
+    <Content Include="docs\mint.json" />
     <None Include="Properties\PublishProfiles\LibraryOSMvc - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Models\Entity\Model1.Context.tt">
