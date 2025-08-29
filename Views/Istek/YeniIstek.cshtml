@@ -1,0 +1,92 @@
+﻿@model KutuphaneMvc.Models.Entity.ISTEK
+@{
+    ViewBag.Title = "Yeni İstek";
+}
+
+<div class="card">
+    @if (TempData["ok"] != null)
+    {
+    <div class="alert alert-success">@TempData["ok"]</div>
+    }
+    @if (TempData["hata"] != null)
+    {
+    <div class="alert alert-danger">@TempData["hata"]</div>
+    }
+
+    <div class="card-header">
+        <h4>Yeni İstek</h4>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("YeniIstek", "Istek",FormMethod.Post))
+        {
+        @Html.AntiForgeryToken()
+
+ <!-- İstek Tipi -->
+        <div class="form-group">
+            <label>İstek Tipi</label>
+            <select id="istekTipi" name="TIP" class="form-control" required>
+                <option value="">Seçiniz</option>
+                <option value="Emanet">Emanet İsteği</option>
+                <option value="Rezervasyon">Rezervasyon İsteği</option>
+                <option value="Bagis">Kitap Bağışı İsteği</option>
+                <option value="TeslimEtme">Teslim Etme İsteği</option>
+            </select>
+        </div>
+
+ <!-- Emanet için (müsait kitaplar) -->
+        <div class="form-group" id="emanetDiv">
+            <label>Müsait Kitap Seç</label>
+            @Html.DropDownListFor(m => m.KITAP_ID, (IEnumerable<SelectListItem>)ViewBag.BosKitaplar, "Seçiniz", new { @class = "form-control" })
+        </div>
+
+ <!-- Rezervasyon için (ödünçteki tüm kitaplar) -->
+        <div class="form-group" id="rezDiv" style="display:none;">
+            <label>Ödünçteki Kitap Seç</label>
+            @Html.DropDownList("Rezervasyon_KITAP_ID", (IEnumerable<SelectListItem>)ViewBag.OduncteKitaplar, "Seçiniz", new { @class = "form-control" })
+        </div>
+
+ <!-- Teslim Etme için (kullanıcının aktif emanetleri) -->
+        <div class="form-group" id="teslimDiv" style="display:none;">
+            <label>Aktif Emanetinizdeki Kitap</label>
+            @Html.DropDownList("Teslim_KITAP_ID", (IEnumerable<SelectListItem>)ViewBag.AktifEmanetler, "Seçiniz", new { @class = "form-control" })
+        </div>
+
+ <!-- Bağış için -->
+        <div id="bagisDiv" style="display:none;">
+            <div class="form-group">
+                <label>Kitap Adı</label>
+                <input type="text" name="Bagis_KitapAdi" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Yazar</label>
+                <input type="text" name="Bagis_Yazar" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Yayın Yılı</label>
+                <input type="number" name="Bagis_Yil" class="form-control" />
+            </div>
+        </div>
+
+ <!-- Açıklama (her isteğe opsiyonel) -->
+        <div class="form-group">
+            <label>Açıklama</label>
+            @Html.TextAreaFor(m => m.ACIKLAMA, new { @class = "form-control", rows = 3 })
+        </div>
+        @Html.TextBoxFor(m=>m.KITAP_ID)
+        <button type="submit" class="btn btn-primary">İstek Gönder</button>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("istekTipi").addEventListener("change", function () {
+            var tip = this.value;
+
+            document.getElementById("emanetDiv").style.display = (tip === "Emanet") ? "block" : "none";
+            document.getElementById("rezDiv").style.display = (tip === "Rezervasyon") ? "block" : "none";
+            document.getElementById("teslimDiv").style.display = (tip === "TeslimEtme") ? "block" : "none";
+            document.getElementById("bagisDiv").style.display = (tip === "Bagis") ? "block" : "none";
+        });
+    </script>
+}

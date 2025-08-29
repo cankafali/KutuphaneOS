@@ -1,0 +1,342 @@
+﻿@using System.Linq
+@using KutuphaneMvc.Models.Entity
+@{
+    ViewBag.Title = "Kütüphane İzleme Merkezi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool isAdmin = (ViewBag.IsAdmin as bool?) ?? false;
+
+    int totalBooks = ViewBag.TotalBooks ?? 0;
+    int totalAvailable = ViewBag.TotalAvailableBooks ?? 0;
+    int activeLoans = ViewBag.ActiveLoans ?? 0;
+    int overdue = ViewBag.Overdue ?? 0;
+    int totalrequest = ViewBag.TotalRequest ?? 0;
+
+    var categories = ViewBag.CategoryStats as IEnumerable<dynamic>;
+    var shelves = ViewBag.ShelfStatus as IEnumerable<dynamic>;
+}
+
+<style>
+    .page-subtitle {
+        color: #6b7280;
+        font-size: .9rem;
+        margin-top: -.25rem
+    }
+
+    .card-mavi {
+        background-color: #E3F2FD;
+    }
+
+    .card-yesil {
+        background-color: #E8F5E9;
+    }
+
+    .card-sari {
+        background-color: #FFFDE7;
+    }
+
+    .card-kirmizi {
+        background-color: #FFEBEE;
+    }
+
+    .icon-mavi {
+        color: #1E88E5;
+    }
+
+    .icon-yesil {
+        color: #43A047;
+    }
+
+    .icon-sari {
+        color: #F9A825;
+    }
+
+    .icon-kirmizi {
+        color: #E53935;
+    }
+
+    table thead {
+        background: linear-gradient(to right,#e0e0e0,#f5f5f5);
+        font-weight: bold;
+    }
+
+    table tbody tr:nth-child(even) {
+        background: #f9f9f9;
+    }
+
+    table tbody tr:nth-child(odd) {
+        background: #fff;
+    }
+
+    table td, table th {
+        padding: 12px 16px;
+        vertical-align: middle;
+    }
+
+    tr:hover {
+        background: #f0f8ff !important;
+        transition: .2s ease-in-out;
+    }
+
+    .progress {
+        background: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 6px;
+        transition: width .3s ease-in-out;
+    }
+
+    .bg-primary {
+        background: #3f51b5 !important;
+    }
+
+    .bg-warning {
+        background: #fbc02d !important;
+    }
+
+    .bg-danger {
+        background: #e53935 !important;
+    }
+
+    .bg-success {
+        background: #43A047 !important;
+    }
+</style>
+
+@if (isAdmin)
+{
+    @* ===== ADMIN PANELİ ===== *@
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <h1>Kütüphane İzleme Merkezi</h1>
+                <div class="page-subtitle">Admin için Özet Görünüm</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <!-- Üst: Durum Kartları -->
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-mavi">
+                        <div class="card-body d-flex align-items-center">
+                            <i data-feather="book" class="mr-3 icon-mavi"></i>
+                            <div class="w-100">
+                                <div class="text-muted">Toplam Kitap</div>
+                                <h5 class="mb-0">@totalBooks</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-yesil">
+                        <div class="card-body d-flex align-items-center">
+                            <i data-feather="check-circle" class="mr-3 icon-yesil"></i>
+                            <div class="w-100">
+                                <div class="text-muted">Müsait Kitap</div>
+                                <h5 class="mb-0">@totalAvailable</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-sari">
+                        <div class="card-body d-flex align-items-center">
+                            <i data-feather="archive" class="mr-3 icon-sari"></i>
+                            <div class="w-100">
+                                <div class="text-muted">Aktif Ödünç</div>
+                                <h5 class="mb-0">@activeLoans</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-sari">
+                        <div class="card-body d-flex align-items-center">
+                            <i data-feather="archive" class="mr-3 icon-sari"></i>
+                            <div class="w-100">
+                                <div class="text-muted">Aktif İstek</div>
+                                <h5 class="mb-0">@totalrequest</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-kirmizi">
+                        <div class="card-body d-flex align-items-center">
+                            <i data-feather="alert-triangle" class="mr-3 icon-kirmizi"></i>
+                            <div class="w-100">
+                                <div class="text-muted">Geciken</div>
+                                <h5 class="mb-0 text-danger">@overdue</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orta: Kategori & Raf -->
+            <div class="row">
+                <!-- Kategori Dağılımı -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header"><h4>Kategori Bazlı Kitap Dağılımı</h4></div>
+                        <div class="card-body p-0">
+                            <table class="table mb-0">
+                                <thead><tr><th>Kategori</th><th class="text-right">Kitap Sayısı</th></tr></thead>
+                                <tbody>
+                                    @if (categories != null && categories.Any())
+                                    {
+                                        foreach (var c in categories)
+                                        {
+                                            string badgeColor = "badge-secondary";
+                                            string icon = "book";
+                                            switch ((c.Kategori ?? "").ToString().ToLower())
+                                            {
+                                                case "bilim": badgeColor = "badge-info"; icon = "activity"; break;
+                                                case "çocuk": badgeColor = "badge-warning"; icon = "smile"; break;
+                                                case "roman": badgeColor = "badge-primary"; icon = "book-open"; break;
+                                                case "psikoloji": badgeColor = "badge-success"; icon = "user"; break;
+                                                case "felsefe": badgeColor = "badge-dark"; icon = "help-circle"; break;
+                                                case "biyografi": badgeColor = "badge-light"; icon = "user-check"; break;
+                                                case "tarih": badgeColor = "badge-danger"; icon = "clock"; break;
+                                                case "fantastik": badgeColor = "badge-purple"; icon = "moon"; break;
+                                            }
+                                            <tr class="hover:bg-light">
+                                                <td>
+                                                    <i data-feather="@icon" class="mr-2"></i>
+                                                    <span class="badge @badgeColor">@c.Kategori</span>
+                                                </td>
+                                                <td class="text-right font-weight-bold">@c.KitapSayisi</td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr><td colspan="2" class="text-muted">Kayıt yok.</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Raf Durumu -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header"><h4>Raf Doluluk Raporu</h4></div>
+                        <div class="card-body p-0">
+                            <table class="table mb-0">
+                                <thead><tr><th>Raf</th><th>Doluluk</th><th class="text-right">Durum</th></tr></thead>
+                                <tbody>
+                                    @if (shelves != null && shelves.Any())
+                                    {
+                                        foreach (var s in shelves)
+                                        {
+                                            int used = (int)s.Used; int cap = (int)s.Capacity;
+                                            int pct = (cap > 0) ? (100 * used / cap) : 0;
+                                            string barClass = pct >= 75 ? (pct >= 90 ? "bg-danger" : "bg-warning") : "bg-success";
+                                            <tr>
+                                                <td><i data-feather="archive" class="mr-1 text-muted"></i> @s.ShelfName</td>
+                                                <td>@used / @cap</td>
+                                                <td class="text-right align-middle">
+                                                    <div class="progress" style="height:10px;">
+                                                        <div class="progress-bar @barClass" role="progressbar" style="width:@pct%" aria-valuenow="@pct" aria-valuemin="0" aria-valuemax="100">
+                                                            <span class="sr-only">@pct%</span>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted">@pct%</small>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr><td colspan="3" class="text-muted">Kayıt yok.</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    @* ===== ÜYE PANELİ ===== *@
+    <section class="section">
+        <div class="section-header">
+
+            <div>
+                <h1>Kütüphane Sistemine Hoş Geldiniz</h1>
+                <div class="page-subtitle">Üye Paneli</div>
+            </div>
+
+            @if (TempData["BanliUyari"] != null)
+            {
+                <div class="alert alert-warning">
+                    @TempData["BanliUyari"]
+                </div>
+            }
+        </div>
+
+        <div class="section-body">
+            <div class="row">
+                <!-- Ödünç Aldıklarım -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-header"><h4>Ödünç Aldığım Kitaplar</h4></div>
+                        <div class="card-body">
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><i class="fas fa-book"></i></div>
+                                <h2>Ödünçleri Görüntüle</h2>
+                                <p class="lead">Aktif ödünçlerin ve iade tarihlerin burada.</p>
+                                <a href="/Emanet/Index" class="btn btn-primary mt-4">Kitaplarımı Görüntüle</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kitap Arama -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-header"><h4>Kitap Ara</h4></div>
+                        <div class="card-body">
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><i class="fas fa-search"></i></div>
+                                <h2>Kütüphane Kataloğu</h2>
+                                <p class="lead">Binlerce kitap arasından arama yap.</p>
+                                <a href="/Book/Index" class="btn btn-primary mt-4">Kataloğa Git</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profil -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-header"><h4>Profilim</h4></div>
+                        <div class="card-body">
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><i class="fas fa-user"></i></div>
+                                <h2>Üyelik Bilgilerim</h2>
+                                <p class="lead">Bilgilerini görüntüle ve güncelle.</p>
+                                <a href="/Uye/Profil" class="btn btn-primary mt-4">Profile Git</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <script>
+        if (window.feather) { feather.replace(); }
+    </script>
+}

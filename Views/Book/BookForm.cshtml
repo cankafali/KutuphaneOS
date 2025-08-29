@@ -1,0 +1,65 @@
+﻿@model KutuphaneMvc.Models.Entity.KITAP
+@{
+    ViewBag.Title = "Yeni Kitap Ekle";
+}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Kitap Ekle</h4>
+            </div>
+            <div class="card-body">
+
+                @using (Html.BeginForm("SaveBook", "Book", FormMethod.Post))
+                {
+                @Html.HiddenFor(x => x.KITAP_ID)
+
+                <div class="form-group">
+                    <label>Kitap Adı</label>
+                    @Html.TextBoxFor(x => x.AD, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label>Yazar</label>
+                    @Html.TextBoxFor(x => x.YAZAR, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label>Barkod</label>
+                    @Html.TextBoxFor(x => x.ISBN, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label>Basım Yılı</label>
+                    @Html.TextBoxFor(x => x.BASIM_YILI, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label>Kategori</label>
+                    @Html.DropDownListFor(x => x.KATEGORI_ID,
+                        ViewBag.Kategoriler as List<SelectListItem>,
+                        "Kategori Seçin",
+                        new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label>Raf</label>
+                    @Html.DropDownListFor(x => x.RAF_ID,
+                           ViewBag.Raflar as List<SelectListItem>,
+                           "Raf Seçin",
+                           new { @class = "form-control" })
+                </div>
+
+                @*<div class="form-group">
+                        <label>Durum</label>
+                        @Html.HiddenFor(x => x.DURUM, new { @Value = true })
+                    </div>*@
+
+                <button type="submit" class="btn btn-outline-primary">Kaydet</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+    </div>
+</div>

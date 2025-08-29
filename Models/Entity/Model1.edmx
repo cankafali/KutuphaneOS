@@ -1,0 +1,803 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LibraryDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EMANET">
+          <Key>
+            <PropertyRef Name="EMANET" />
+          </Key>
+          <Property Name="EMANET" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KITAP_ID" Type="int" />
+          <Property Name="UYE_ID" Type="int" />
+          <Property Name="ALINIS_TARIHI" Type="date" />
+          <Property Name="TESLIM_TARIHI" Type="date" />
+          <Property Name="TESLIM_EDILDI_MI" Type="bit" />
+        </EntityType>
+        <EntityType Name="ISTEK">
+          <Key>
+            <PropertyRef Name="ISTEK_ID" />
+          </Key>
+          <Property Name="ISTEK_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UYE_ID" Type="int" Nullable="false" />
+          <Property Name="KITAP_ID" Type="int" />
+          <Property Name="TIP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TARIH" Type="datetime" Nullable="false" />
+          <Property Name="DURUM" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ACIKLAMA" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="KATEGORI">
+          <Key>
+            <PropertyRef Name="KATEGORI_ID" />
+          </Key>
+          <Property Name="KATEGORI_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KATEGORI_ADI" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="KITAP">
+          <Key>
+            <PropertyRef Name="KITAP_ID" />
+          </Key>
+          <Property Name="KITAP_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="YAZAR" Type="nvarchar" MaxLength="50" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="50" />
+          <Property Name="BASIM_YILI" Type="int" />
+          <Property Name="KATEGORI_ID" Type="int" />
+          <Property Name="RAF_ID" Type="int" />
+          <Property Name="DURUM" Type="bit" />
+        </EntityType>
+        <EntityType Name="RAF">
+          <Key>
+            <PropertyRef Name="RAF_ID" />
+          </Key>
+          <Property Name="RAF_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RAF_AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="KAPASITE" Type="int" />
+          <Property Name="KAT_NO" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="RAF_KATEGORI">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KATEGORI_ID" Type="int" Nullable="false" />
+          <Property Name="RAF_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RAF_TRANSFER">
+          <Key>
+            <PropertyRef Name="TRANSFER_ID" />
+          </Key>
+          <Property Name="TRANSFER_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KITAP_ID" Type="int" />
+          <Property Name="ESKI_RAF_ID" Type="int" />
+          <Property Name="YENI_RAF_ID" Type="int" />
+          <Property Name="TARIH" Type="date" />
+        </EntityType>
+        <EntityType Name="REZERVASYON">
+          <Key>
+            <PropertyRef Name="REZ_ID" />
+          </Key>
+          <Property Name="REZ_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KITAP_ID" Type="int" />
+          <Property Name="UYE_ID" Type="int" />
+          <Property Name="TALEP_TARIH" Type="date" />
+          <Property Name="SON_GECERLILIK" Type="date" />
+          <Property Name="DURUM" Type="tinyint" />
+          <Property Name="BASLANGIC_TARIH" Type="date" />
+        </EntityType>
+        <EntityType Name="ROLE">
+          <Key>
+            <PropertyRef Name="ROLE_ID" />
+          </Key>
+          <Property Name="ROLE_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLE_AD" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UYE">
+          <Key>
+            <PropertyRef Name="UYE_ID" />
+          </Key>
+          <Property Name="UYE_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="SOYAD" Type="nvarchar" MaxLength="50" />
+          <Property Name="EMAIL" Type="nvarchar" MaxLength="50" />
+          <Property Name="TELEFON" Type="nvarchar" MaxLength="50" />
+          <Property Name="UYELIK_TARIHI" Type="date" />
+          <Property Name="ROLE_ID" Type="int" />
+          <Property Name="CEZA_PUAN" Type="tinyint" />
+          <Property Name="PAROLA_HASH" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'LibraryDB.dbo.KITAP_KATEGORI' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="KITAP_KATEGORI">
+          <Key>
+            <PropertyRef Name="KITAP_ID" />
+            <PropertyRef Name="KTGRID" />
+          </Key>
+          <Property Name="KTGR1ID" Type="int" />
+          <Property Name="KITAP_ID" Type="int" Nullable="false" />
+          <Property Name="AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="YAZAR" Type="nvarchar" MaxLength="50" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="50" />
+          <Property Name="BASIM_YILI" Type="int" />
+          <Property Name="RAF_ID" Type="int" />
+          <Property Name="DURUM" Type="bit" />
+          <Property Name="KTGRID" Type="int" Nullable="false" />
+          <Property Name="KATEGORI_ADI" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'LibraryDB.dbo.View_EmanetKitap' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_EmanetKitap">
+          <Key>
+            <PropertyRef Name="KITAP_ID" />
+            <PropertyRef Name="EmanetID" />
+            <PropertyRef Name="UYE_ID" />
+          </Key>
+          <Property Name="KITAP_ID" Type="int" Nullable="false" />
+          <Property Name="KitapAdi" Type="nvarchar" MaxLength="50" />
+          <Property Name="YAZAR" Type="nvarchar" MaxLength="50" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="50" />
+          <Property Name="KATEGORI_ID" Type="int" />
+          <Property Name="DURUM" Type="bit" />
+          <Property Name="EmanetID" Type="int" Nullable="false" />
+          <Property Name="ALINIS_TARIHI" Type="date" />
+          <Property Name="TESLIM_TARIHI" Type="date" />
+          <Property Name="TESLIM_EDILDI_MI" Type="bit" />
+          <Property Name="UYE_ID" Type="int" Nullable="false" />
+          <Property Name="EMAIL" Type="nvarchar" MaxLength="50" />
+          <Property Name="TELEFON" Type="nvarchar" MaxLength="50" />
+          <Property Name="UYELIK_TARIHI" Type="date" />
+          <Property Name="ROLE_ID" Type="int" />
+          <Property Name="CEZA_PUAN" Type="tinyint" />
+          <Property Name="UyeAdi" Type="nvarchar" MaxLength="50" />
+          <Property Name="UyeSoyadi" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'LibraryDB.dbo.View_ISTEK' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_ISTEK">
+          <Key>
+            <PropertyRef Name="KITAP_ID" />
+            <PropertyRef Name="ISTEK_ID" />
+            <PropertyRef Name="UYEID" />
+            <PropertyRef Name="ID_UYE" />
+            <PropertyRef Name="TARIH" />
+            <PropertyRef Name="DURUM" />
+            <PropertyRef Name="TIP" />
+          </Key>
+          <Property Name="KITAP_ID" Type="int" Nullable="false" />
+          <Property Name="ISTEK_ID" Type="int" Nullable="false" />
+          <Property Name="UYEID" Type="int" Nullable="false" />
+          <Property Name="UYE_AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="UYE_SOYAD" Type="nvarchar" MaxLength="50" />
+          <Property Name="ID_UYE" Type="int" Nullable="false" />
+          <Property Name="TARIH" Type="datetime" Nullable="false" />
+          <Property Name="DURUM" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="TIP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID_KITAP" Type="int" />
+          <Property Name="ACIKLAMA" Type="nvarchar" MaxLength="255" />
+          <Property Name="AD" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'LibraryDB.dbo.View_RAF_KITAP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_RAF_KITAP">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="KATEGORI_ID" />
+            <PropertyRef Name="RAF_ID" />
+            <PropertyRef Name="KITAP_ID" />
+            <PropertyRef Name="kategorı_id" />
+          </Key>
+          <Property Name="RAF_AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="KAPASITE" Type="int" />
+          <Property Name="KAT_NO" Type="tinyint" />
+          <Property Name="Expr1" Type="int" />
+          <Property Name="AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="YAZAR" Type="nvarchar" MaxLength="50" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="50" />
+          <Property Name="BASIM_YILI" Type="int" />
+          <Property Name="DURUM" Type="bit" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="KATEGORI_ID" Type="int" Nullable="false" />
+          <Property Name="RAF_ID" Type="int" Nullable="false" />
+          <Property Name="KITAP_ID" Type="int" Nullable="false" />
+          <Property Name="kategorı_id" Type="int" Nullable="false" />
+          <Property Name="KATEGORI_ADI" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'LibraryDB.dbo.VW_Rezervasyon' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VW_Rezervasyon">
+          <Key>
+            <PropertyRef Name="UYE_ID" />
+            <PropertyRef Name="REZ_ID" />
+            <PropertyRef Name="KITAP_ID" />
+          </Key>
+          <Property Name="UYE_ID" Type="int" Nullable="false" />
+          <Property Name="REZ_ID" Type="int" Nullable="false" />
+          <Property Name="TALEP_TARIH" Type="date" />
+          <Property Name="SON_GECERLILIK" Type="date" />
+          <Property Name="DURUM" Type="tinyint" />
+          <Property Name="KITAP_ID" Type="int" Nullable="false" />
+          <Property Name="AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="YAZAR" Type="nvarchar" MaxLength="50" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="50" />
+          <Property Name="UYE_AD" Type="nvarchar" MaxLength="50" />
+          <Property Name="SOYAD" Type="nvarchar" MaxLength="50" />
+          <Property Name="EMAIL" Type="nvarchar" MaxLength="50" />
+          <Property Name="TELEFON" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityContainer Name="LibraryDBModelStoreContainer">
+          <EntitySet Name="EMANET" EntityType="Self.EMANET" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ISTEK" EntityType="Self.ISTEK" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KATEGORI" EntityType="Self.KATEGORI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KITAP" EntityType="Self.KITAP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RAF" EntityType="Self.RAF" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RAF_KATEGORI" EntityType="Self.RAF_KATEGORI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RAF_TRANSFER" EntityType="Self.RAF_TRANSFER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="REZERVASYON" EntityType="Self.REZERVASYON" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ROLE" EntityType="Self.ROLE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UYE" EntityType="Self.UYE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KITAP_KATEGORI" EntityType="Self.KITAP_KATEGORI" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [KITAP_KATEGORI].[KTGR1ID] AS [KTGR1ID], 
+    [KITAP_KATEGORI].[KITAP_ID] AS [KITAP_ID], 
+    [KITAP_KATEGORI].[AD] AS [AD], 
+    [KITAP_KATEGORI].[YAZAR] AS [YAZAR], 
+    [KITAP_KATEGORI].[ISBN] AS [ISBN], 
+    [KITAP_KATEGORI].[BASIM_YILI] AS [BASIM_YILI], 
+    [KITAP_KATEGORI].[RAF_ID] AS [RAF_ID], 
+    [KITAP_KATEGORI].[DURUM] AS [DURUM], 
+    [KITAP_KATEGORI].[KTGRID] AS [KTGRID], 
+    [KITAP_KATEGORI].[KATEGORI_ADI] AS [KATEGORI_ADI]
+    FROM [dbo].[KITAP_KATEGORI] AS [KITAP_KATEGORI]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_EmanetKitap" EntityType="Self.View_EmanetKitap" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_EmanetKitap].[KITAP_ID] AS [KITAP_ID], 
+    [View_EmanetKitap].[KitapAdi] AS [KitapAdi], 
+    [View_EmanetKitap].[YAZAR] AS [YAZAR], 
+    [View_EmanetKitap].[ISBN] AS [ISBN], 
+    [View_EmanetKitap].[KATEGORI_ID] AS [KATEGORI_ID], 
+    [View_EmanetKitap].[DURUM] AS [DURUM], 
+    [View_EmanetKitap].[EmanetID] AS [EmanetID], 
+    [View_EmanetKitap].[ALINIS_TARIHI] AS [ALINIS_TARIHI], 
+    [View_EmanetKitap].[TESLIM_TARIHI] AS [TESLIM_TARIHI], 
+    [View_EmanetKitap].[TESLIM_EDILDI_MI] AS [TESLIM_EDILDI_MI], 
+    [View_EmanetKitap].[UYE_ID] AS [UYE_ID], 
+    [View_EmanetKitap].[EMAIL] AS [EMAIL], 
+    [View_EmanetKitap].[TELEFON] AS [TELEFON], 
+    [View_EmanetKitap].[UYELIK_TARIHI] AS [UYELIK_TARIHI], 
+    [View_EmanetKitap].[ROLE_ID] AS [ROLE_ID], 
+    [View_EmanetKitap].[CEZA_PUAN] AS [CEZA_PUAN], 
+    [View_EmanetKitap].[UyeAdi] AS [UyeAdi], 
+    [View_EmanetKitap].[UyeSoyadi] AS [UyeSoyadi]
+    FROM [dbo].[View_EmanetKitap] AS [View_EmanetKitap]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_ISTEK" EntityType="Self.View_ISTEK" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_ISTEK].[KITAP_ID] AS [KITAP_ID], 
+    [View_ISTEK].[ISTEK_ID] AS [ISTEK_ID], 
+    [View_ISTEK].[UYEID] AS [UYEID], 
+    [View_ISTEK].[UYE_AD] AS [UYE_AD], 
+    [View_ISTEK].[UYE_SOYAD] AS [UYE_SOYAD], 
+    [View_ISTEK].[ID_UYE] AS [ID_UYE], 
+    [View_ISTEK].[TARIH] AS [TARIH], 
+    [View_ISTEK].[DURUM] AS [DURUM], 
+    [View_ISTEK].[TIP] AS [TIP], 
+    [View_ISTEK].[ID_KITAP] AS [ID_KITAP], 
+    [View_ISTEK].[ACIKLAMA] AS [ACIKLAMA], 
+    [View_ISTEK].[AD] AS [AD]
+    FROM [dbo].[View_ISTEK] AS [View_ISTEK]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_RAF_KITAP" EntityType="Self.View_RAF_KITAP" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_RAF_KITAP].[RAF_AD] AS [RAF_AD], 
+    [View_RAF_KITAP].[KAPASITE] AS [KAPASITE], 
+    [View_RAF_KITAP].[KAT_NO] AS [KAT_NO], 
+    [View_RAF_KITAP].[Expr1] AS [Expr1], 
+    [View_RAF_KITAP].[AD] AS [AD], 
+    [View_RAF_KITAP].[YAZAR] AS [YAZAR], 
+    [View_RAF_KITAP].[ISBN] AS [ISBN], 
+    [View_RAF_KITAP].[BASIM_YILI] AS [BASIM_YILI], 
+    [View_RAF_KITAP].[DURUM] AS [DURUM], 
+    [View_RAF_KITAP].[ID] AS [ID], 
+    [View_RAF_KITAP].[KATEGORI_ID] AS [KATEGORI_ID], 
+    [View_RAF_KITAP].[RAF_ID] AS [RAF_ID], 
+    [View_RAF_KITAP].[KITAP_ID] AS [KITAP_ID], 
+    [View_RAF_KITAP].[kategorı_id] AS [kategorı_id], 
+    [View_RAF_KITAP].[KATEGORI_ADI] AS [KATEGORI_ADI]
+    FROM [dbo].[View_RAF_KITAP] AS [View_RAF_KITAP]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VW_Rezervasyon" EntityType="Self.VW_Rezervasyon" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_Rezervasyon].[UYE_ID] AS [UYE_ID], 
+    [VW_Rezervasyon].[REZ_ID] AS [REZ_ID], 
+    [VW_Rezervasyon].[TALEP_TARIH] AS [TALEP_TARIH], 
+    [VW_Rezervasyon].[SON_GECERLILIK] AS [SON_GECERLILIK], 
+    [VW_Rezervasyon].[DURUM] AS [DURUM], 
+    [VW_Rezervasyon].[KITAP_ID] AS [KITAP_ID], 
+    [VW_Rezervasyon].[AD] AS [AD], 
+    [VW_Rezervasyon].[YAZAR] AS [YAZAR], 
+    [VW_Rezervasyon].[ISBN] AS [ISBN], 
+    [VW_Rezervasyon].[UYE_AD] AS [UYE_AD], 
+    [VW_Rezervasyon].[SOYAD] AS [SOYAD], 
+    [VW_Rezervasyon].[EMAIL] AS [EMAIL], 
+    [VW_Rezervasyon].[TELEFON] AS [TELEFON]
+    FROM [dbo].[VW_Rezervasyon] AS [VW_Rezervasyon]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LibraryDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="LibraryDBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EMANET" EntityType="LibraryDBModel.EMANET" />
+          <EntitySet Name="KATEGORI" EntityType="LibraryDBModel.KATEGORI" />
+          <EntitySet Name="KITAP" EntityType="LibraryDBModel.KITAP" />
+          <EntitySet Name="RAF" EntityType="LibraryDBModel.RAF" />
+          <EntitySet Name="RAF_KATEGORI" EntityType="LibraryDBModel.RAF_KATEGORI" />
+          <EntitySet Name="RAF_TRANSFER" EntityType="LibraryDBModel.RAF_TRANSFER" />
+          <EntitySet Name="ROLE" EntityType="LibraryDBModel.ROLE" />
+          <EntitySet Name="View_EmanetKitap" EntityType="LibraryDBModel.View_EmanetKitap" />
+          <EntitySet Name="KITAP_KATEGORI" EntityType="LibraryDBModel.KITAP_KATEGORI" />
+          <EntitySet Name="UYE" EntityType="LibraryDBModel.UYE" />
+          <EntitySet Name="REZERVASYON" EntityType="LibraryDBModel.REZERVASYON" />
+
+          <EntitySet Name="VW_Rezervasyon" EntityType="LibraryDBModel.VW_Rezervasyon" />
+          <EntitySet Name="View_RAF_KITAP" EntityType="LibraryDBModel.View_RAF_KITAP" />
+          <EntitySet Name="ISTEK" EntityType="LibraryDBModel.ISTEK" />
+          <EntitySet Name="View_ISTEK" EntityType="LibraryDBModel.View_ISTEK" />
+        </EntityContainer>
+        <EntityType Name="EMANET">
+          <Key>
+            <PropertyRef Name="EMANET1" />
+          </Key>
+          <Property Name="EMANET1" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KITAP_ID" Type="Int32" />
+          <Property Name="UYE_ID" Type="Int32" />
+          <Property Name="ALINIS_TARIHI" Type="DateTime" Precision="0" />
+          <Property Name="TESLIM_TARIHI" Type="DateTime" Precision="0" />
+          <Property Name="TESLIM_EDILDI_MI" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="KATEGORI">
+          <Key>
+            <PropertyRef Name="KATEGORI_ID" />
+          </Key>
+          <Property Name="KATEGORI_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KATEGORI_ADI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="KITAP">
+          <Key>
+            <PropertyRef Name="KITAP_ID" />
+          </Key>
+          <Property Name="KITAP_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YAZAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BASIM_YILI" Type="Int32" />
+          <Property Name="KATEGORI_ID" Type="Int32" />
+          <Property Name="RAF_ID" Type="Int32" />
+          <Property Name="DURUM" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="RAF">
+          <Key>
+            <PropertyRef Name="RAF_ID" />
+          </Key>
+          <Property Name="RAF_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RAF_AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KAPASITE" Type="Int32" />
+          <Property Name="KAT_NO" Type="Byte" />
+        </EntityType>
+        <EntityType Name="RAF_KATEGORI">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KATEGORI_ID" Type="Int32" Nullable="false" />
+          <Property Name="RAF_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RAF_TRANSFER">
+          <Key>
+            <PropertyRef Name="TRANSFER_ID" />
+          </Key>
+          <Property Name="TRANSFER_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KITAP_ID" Type="Int32" />
+          <Property Name="ESKI_RAF_ID" Type="Int32" />
+          <Property Name="YENI_RAF_ID" Type="Int32" />
+          <Property Name="TARIH" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="ROLE">
+          <Key>
+            <PropertyRef Name="ROLE_ID" />
+          </Key>
+          <Property Name="ROLE_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLE_AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="View_EmanetKitap">
+          <Key>
+            <PropertyRef Name="KITAP_ID" />
+            <PropertyRef Name="EmanetID" />
+            <PropertyRef Name="UYE_ID" />
+          </Key>
+          <Property Name="KITAP_ID" Type="Int32" Nullable="false" />
+          <Property Name="KitapAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YAZAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KATEGORI_ID" Type="Int32" />
+          <Property Name="DURUM" Type="Boolean" />
+          <Property Name="EmanetID" Type="Int32" Nullable="false" />
+          <Property Name="ALINIS_TARIHI" Type="DateTime" Precision="0" />
+          <Property Name="TESLIM_TARIHI" Type="DateTime" Precision="0" />
+          <Property Name="TESLIM_EDILDI_MI" Type="Boolean" />
+          <Property Name="UYE_ID" Type="Int32" Nullable="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TELEFON" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UYELIK_TARIHI" Type="DateTime" Precision="0" />
+          <Property Name="ROLE_ID" Type="Int32" />
+          <Property Name="CEZA_PUAN" Type="Byte" />
+          <Property Name="UyeAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UyeSoyadi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="KITAP_KATEGORI">
+          <Key>
+            <PropertyRef Name="KITAP_ID" />
+            <PropertyRef Name="KTGRID" />
+          </Key>
+          <Property Name="KTGR1ID" Type="Int32" />
+          <Property Name="KITAP_ID" Type="Int32" Nullable="false" />
+          <Property Name="AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YAZAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BASIM_YILI" Type="Int32" />
+          <Property Name="RAF_ID" Type="Int32" />
+          <Property Name="DURUM" Type="Boolean" />
+          <Property Name="KTGRID" Type="Int32" Nullable="false" />
+          <Property Name="KATEGORI_ADI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UYE">
+          <Key>
+            <PropertyRef Name="UYE_ID" />
+          </Key>
+          <Property Name="UYE_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SOYAD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TELEFON" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UYELIK_TARIHI" Type="DateTime" Precision="0" />
+          <Property Name="ROLE_ID" Type="Int32" />
+          <Property Name="CEZA_PUAN" Type="Byte" />
+          <Property Name="PAROLA_HASH" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="REZERVASYON">
+          <Key>
+            <PropertyRef Name="REZ_ID" />
+          </Key>
+          <Property Name="REZ_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KITAP_ID" Type="Int32" />
+          <Property Name="UYE_ID" Type="Int32" />
+          <Property Name="TALEP_TARIH" Type="DateTime" Precision="0" />
+          <Property Name="SON_GECERLILIK" Type="DateTime" Precision="0" />
+          <Property Name="DURUM" Type="Byte" />
+          <Property Name="BASLANGIC_TARIH" Type="DateTime" Precision="0" />
+        </EntityType>
+
+        <EntityType Name="VW_Rezervasyon">
+          <Key>
+            <PropertyRef Name="UYE_ID" />
+            <PropertyRef Name="REZ_ID" />
+            <PropertyRef Name="KITAP_ID" />
+          </Key>
+          <Property Name="UYE_ID" Type="Int32" Nullable="false" />
+          <Property Name="REZ_ID" Type="Int32" Nullable="false" />
+          <Property Name="TALEP_TARIH" Type="DateTime" Precision="0" />
+          <Property Name="SON_GECERLILIK" Type="DateTime" Precision="0" />
+          <Property Name="DURUM" Type="Byte" />
+          <Property Name="KITAP_ID" Type="Int32" Nullable="false" />
+          <Property Name="AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YAZAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UYE_AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SOYAD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TELEFON" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="View_RAF_KITAP">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="KATEGORI_ID" />
+            <PropertyRef Name="RAF_ID" />
+            <PropertyRef Name="KITAP_ID" />
+            <PropertyRef Name="kategorı_id" />
+          </Key>
+          <Property Name="RAF_AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KAPASITE" Type="Int32" />
+          <Property Name="KAT_NO" Type="Byte" />
+          <Property Name="Expr1" Type="Int32" />
+          <Property Name="AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YAZAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BASIM_YILI" Type="Int32" />
+          <Property Name="DURUM" Type="Boolean" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="KATEGORI_ID" Type="Int32" Nullable="false" />
+          <Property Name="RAF_ID" Type="Int32" Nullable="false" />
+          <Property Name="KITAP_ID" Type="Int32" Nullable="false" />
+          <Property Name="kategorı_id" Type="Int32" Nullable="false" />
+          <Property Name="KATEGORI_ADI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ISTEK">
+          <Key>
+            <PropertyRef Name="ISTEK_ID" />
+          </Key>
+          <Property Name="ISTEK_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UYE_ID" Type="Int32" Nullable="false" />
+          <Property Name="KITAP_ID" Type="Int32" />
+          <Property Name="TIP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TARIH" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DURUM" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ACIKLAMA" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="View_ISTEK">
+          <Key>
+            <PropertyRef Name="KITAP_ID" />
+            <PropertyRef Name="ISTEK_ID" />
+            <PropertyRef Name="UYEID" />
+            <PropertyRef Name="ID_UYE" />
+            <PropertyRef Name="TARIH" />
+            <PropertyRef Name="DURUM" />
+            <PropertyRef Name="TIP" />
+          </Key>
+          <Property Name="KITAP_ID" Type="Int32" Nullable="false" />
+          <Property Name="ISTEK_ID" Type="Int32" Nullable="false" />
+          <Property Name="UYEID" Type="Int32" Nullable="false" />
+          <Property Name="UYE_AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UYE_SOYAD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID_UYE" Type="Int32" Nullable="false" />
+          <Property Name="TARIH" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DURUM" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TIP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID_KITAP" Type="Int32" />
+          <Property Name="ACIKLAMA" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LibraryDBModelStoreContainer" CdmEntityContainer="LibraryDBEntities1">
+          <EntitySetMapping Name="EMANET">
+            <EntityTypeMapping TypeName="LibraryDBModel.EMANET">
+              <MappingFragment StoreEntitySet="EMANET">
+                <ScalarProperty Name="TESLIM_EDILDI_MI" ColumnName="TESLIM_EDILDI_MI" />
+                <ScalarProperty Name="TESLIM_TARIHI" ColumnName="TESLIM_TARIHI" />
+                <ScalarProperty Name="ALINIS_TARIHI" ColumnName="ALINIS_TARIHI" />
+                <ScalarProperty Name="UYE_ID" ColumnName="UYE_ID" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+                <ScalarProperty Name="EMANET1" ColumnName="EMANET" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KATEGORI">
+            <EntityTypeMapping TypeName="LibraryDBModel.KATEGORI">
+              <MappingFragment StoreEntitySet="KATEGORI">
+                <ScalarProperty Name="KATEGORI_ADI" ColumnName="KATEGORI_ADI" />
+                <ScalarProperty Name="KATEGORI_ID" ColumnName="KATEGORI_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KITAP">
+            <EntityTypeMapping TypeName="LibraryDBModel.KITAP">
+              <MappingFragment StoreEntitySet="KITAP">
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="RAF_ID" ColumnName="RAF_ID" />
+                <ScalarProperty Name="KATEGORI_ID" ColumnName="KATEGORI_ID" />
+                <ScalarProperty Name="BASIM_YILI" ColumnName="BASIM_YILI" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="YAZAR" ColumnName="YAZAR" />
+                <ScalarProperty Name="AD" ColumnName="AD" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RAF">
+            <EntityTypeMapping TypeName="LibraryDBModel.RAF">
+              <MappingFragment StoreEntitySet="RAF">
+                <ScalarProperty Name="KAT_NO" ColumnName="KAT_NO" />
+                <ScalarProperty Name="KAPASITE" ColumnName="KAPASITE" />
+                <ScalarProperty Name="RAF_AD" ColumnName="RAF_AD" />
+                <ScalarProperty Name="RAF_ID" ColumnName="RAF_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RAF_KATEGORI">
+            <EntityTypeMapping TypeName="LibraryDBModel.RAF_KATEGORI">
+              <MappingFragment StoreEntitySet="RAF_KATEGORI">
+                <ScalarProperty Name="RAF_ID" ColumnName="RAF_ID" />
+                <ScalarProperty Name="KATEGORI_ID" ColumnName="KATEGORI_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RAF_TRANSFER">
+            <EntityTypeMapping TypeName="LibraryDBModel.RAF_TRANSFER">
+              <MappingFragment StoreEntitySet="RAF_TRANSFER">
+                <ScalarProperty Name="TARIH" ColumnName="TARIH" />
+                <ScalarProperty Name="YENI_RAF_ID" ColumnName="YENI_RAF_ID" />
+                <ScalarProperty Name="ESKI_RAF_ID" ColumnName="ESKI_RAF_ID" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+                <ScalarProperty Name="TRANSFER_ID" ColumnName="TRANSFER_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ROLE">
+            <EntityTypeMapping TypeName="LibraryDBModel.ROLE">
+              <MappingFragment StoreEntitySet="ROLE">
+                <ScalarProperty Name="ROLE_AD" ColumnName="ROLE_AD" />
+                <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_EmanetKitap">
+            <EntityTypeMapping TypeName="LibraryDBModel.View_EmanetKitap">
+              <MappingFragment StoreEntitySet="View_EmanetKitap">
+                <ScalarProperty Name="UyeSoyadi" ColumnName="UyeSoyadi" />
+                <ScalarProperty Name="UyeAdi" ColumnName="UyeAdi" />
+                <ScalarProperty Name="CEZA_PUAN" ColumnName="CEZA_PUAN" />
+                <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+                <ScalarProperty Name="UYELIK_TARIHI" ColumnName="UYELIK_TARIHI" />
+                <ScalarProperty Name="TELEFON" ColumnName="TELEFON" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="UYE_ID" ColumnName="UYE_ID" />
+                <ScalarProperty Name="TESLIM_EDILDI_MI" ColumnName="TESLIM_EDILDI_MI" />
+                <ScalarProperty Name="TESLIM_TARIHI" ColumnName="TESLIM_TARIHI" />
+                <ScalarProperty Name="ALINIS_TARIHI" ColumnName="ALINIS_TARIHI" />
+                <ScalarProperty Name="EmanetID" ColumnName="EmanetID" />
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="KATEGORI_ID" ColumnName="KATEGORI_ID" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="YAZAR" ColumnName="YAZAR" />
+                <ScalarProperty Name="KitapAdi" ColumnName="KitapAdi" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KITAP_KATEGORI">
+            <EntityTypeMapping TypeName="LibraryDBModel.KITAP_KATEGORI">
+              <MappingFragment StoreEntitySet="KITAP_KATEGORI">
+                <ScalarProperty Name="KATEGORI_ADI" ColumnName="KATEGORI_ADI" />
+                <ScalarProperty Name="KTGRID" ColumnName="KTGRID" />
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="RAF_ID" ColumnName="RAF_ID" />
+                <ScalarProperty Name="BASIM_YILI" ColumnName="BASIM_YILI" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="YAZAR" ColumnName="YAZAR" />
+                <ScalarProperty Name="AD" ColumnName="AD" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+                <ScalarProperty Name="KTGR1ID" ColumnName="KTGR1ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UYE">
+            <EntityTypeMapping TypeName="LibraryDBModel.UYE">
+              <MappingFragment StoreEntitySet="UYE">
+                <ScalarProperty Name="PAROLA_HASH" ColumnName="PAROLA_HASH" />
+                <ScalarProperty Name="CEZA_PUAN" ColumnName="CEZA_PUAN" />
+                <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+                <ScalarProperty Name="UYELIK_TARIHI" ColumnName="UYELIK_TARIHI" />
+                <ScalarProperty Name="TELEFON" ColumnName="TELEFON" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="SOYAD" ColumnName="SOYAD" />
+                <ScalarProperty Name="AD" ColumnName="AD" />
+                <ScalarProperty Name="UYE_ID" ColumnName="UYE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="REZERVASYON">
+            <EntityTypeMapping TypeName="LibraryDBModel.REZERVASYON">
+              <MappingFragment StoreEntitySet="REZERVASYON">
+                <ScalarProperty Name="BASLANGIC_TARIH" ColumnName="BASLANGIC_TARIH" />
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="SON_GECERLILIK" ColumnName="SON_GECERLILIK" />
+                <ScalarProperty Name="TALEP_TARIH" ColumnName="TALEP_TARIH" />
+                <ScalarProperty Name="UYE_ID" ColumnName="UYE_ID" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+                <ScalarProperty Name="REZ_ID" ColumnName="REZ_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_Rezervasyon">
+            <EntityTypeMapping TypeName="LibraryDBModel.VW_Rezervasyon">
+              <MappingFragment StoreEntitySet="VW_Rezervasyon">
+                <ScalarProperty Name="TELEFON" ColumnName="TELEFON" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="SOYAD" ColumnName="SOYAD" />
+                <ScalarProperty Name="UYE_AD" ColumnName="UYE_AD" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="YAZAR" ColumnName="YAZAR" />
+                <ScalarProperty Name="AD" ColumnName="AD" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="SON_GECERLILIK" ColumnName="SON_GECERLILIK" />
+                <ScalarProperty Name="TALEP_TARIH" ColumnName="TALEP_TARIH" />
+                <ScalarProperty Name="REZ_ID" ColumnName="REZ_ID" />
+                <ScalarProperty Name="UYE_ID" ColumnName="UYE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_RAF_KITAP">
+            <EntityTypeMapping TypeName="LibraryDBModel.View_RAF_KITAP">
+              <MappingFragment StoreEntitySet="View_RAF_KITAP">
+                <ScalarProperty Name="KATEGORI_ADI" ColumnName="KATEGORI_ADI" />
+                <ScalarProperty Name="kategorı_id" ColumnName="kategorı_id" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+                <ScalarProperty Name="RAF_ID" ColumnName="RAF_ID" />
+                <ScalarProperty Name="KATEGORI_ID" ColumnName="KATEGORI_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="BASIM_YILI" ColumnName="BASIM_YILI" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="YAZAR" ColumnName="YAZAR" />
+                <ScalarProperty Name="AD" ColumnName="AD" />
+                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+                <ScalarProperty Name="KAT_NO" ColumnName="KAT_NO" />
+                <ScalarProperty Name="KAPASITE" ColumnName="KAPASITE" />
+                <ScalarProperty Name="RAF_AD" ColumnName="RAF_AD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ISTEK">
+            <EntityTypeMapping TypeName="LibraryDBModel.ISTEK">
+              <MappingFragment StoreEntitySet="ISTEK">
+                <ScalarProperty Name="ACIKLAMA" ColumnName="ACIKLAMA" />
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="TARIH" ColumnName="TARIH" />
+                <ScalarProperty Name="TIP" ColumnName="TIP" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+                <ScalarProperty Name="UYE_ID" ColumnName="UYE_ID" />
+                <ScalarProperty Name="ISTEK_ID" ColumnName="ISTEK_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_ISTEK">
+            <EntityTypeMapping TypeName="LibraryDBModel.View_ISTEK">
+              <MappingFragment StoreEntitySet="View_ISTEK">
+                <ScalarProperty Name="AD" ColumnName="AD" />
+                <ScalarProperty Name="ACIKLAMA" ColumnName="ACIKLAMA" />
+                <ScalarProperty Name="ID_KITAP" ColumnName="ID_KITAP" />
+                <ScalarProperty Name="TIP" ColumnName="TIP" />
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="TARIH" ColumnName="TARIH" />
+                <ScalarProperty Name="ID_UYE" ColumnName="ID_UYE" />
+                <ScalarProperty Name="UYE_SOYAD" ColumnName="UYE_SOYAD" />
+                <ScalarProperty Name="UYE_AD" ColumnName="UYE_AD" />
+                <ScalarProperty Name="UYEID" ColumnName="UYEID" />
+                <ScalarProperty Name="ISTEK_ID" ColumnName="ISTEK_ID" />
+                <ScalarProperty Name="KITAP_ID" ColumnName="KITAP_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

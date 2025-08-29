@@ -1,0 +1,64 @@
+﻿@model KutuphaneMvc.Models.Entity.UYE
+@{
+    ViewBag.Title = "Üye Düzenle";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Üye Düzenle</h4>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.UYE_ID)
+
+        <div class="form-group">
+            <label>Ad</label>
+            @Html.TextBoxFor(m => m.AD, new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.AD, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Soyad</label>
+            @Html.TextBoxFor(m => m.SOYAD, new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.SOYAD, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            @Html.TextBoxFor(m => m.EMAIL, new { @class = "form-control", type = "email" })
+            @Html.ValidationMessageFor(m => m.EMAIL, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Telefon</label>
+            @Html.TextBoxFor(m => m.TELEFON, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.TELEFON, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Ceza Puanı</label>
+            @Html.TextBoxFor(m => m.CEZA_PUAN, new { @class = "form-control", type = "number", min = "0", max = "255" })
+            @Html.ValidationMessageFor(m => m.CEZA_PUAN, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Yetki</label>
+            @Html.DropDownListFor(m => m.ROLE_ID,
+                          new SelectList(new[]
+                          {
+                    new { Value = "1", Text = "Admin" },
+                    new { Value = "2", Text = "Üye" }
+                          }, "Value", "Text"),
+                          "Seçiniz",
+                          new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ROLE_ID, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">İptal</a>
+        }
+    </div>
+</div>

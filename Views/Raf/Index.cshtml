@@ -1,0 +1,72 @@
+﻿@model List<KutuphaneMvc.Models.Entity.View_RAF_KITAP>
+
+@{
+    var rafGruplari = Model.GroupBy(x => x.RAF_AD).OrderBy(x => x.Key).ToList();
+}
+
+<!-- DROPDOWN -->
+<select id="rafSelect" class="form-control mb-4" style="width: 300px;">
+    <option value="">Bir raf seçin</option>
+    @foreach (var raf in rafGruplari)
+    {
+    <option value="@raf.Key">@raf.Key</option>
+    }
+</select>
+
+<!-- RAFLAR -->
+@foreach (var raf in rafGruplari)
+{
+
+<div class="raf-bolumu" data-raf="@raf.Key" style="display: none;">
+    <h3>📚 RAF: @raf.Key</h3>
+
+    @{ var kategoriGruplari = raf.GroupBy(x => x.KATEGORI_ID); }
+
+    @foreach (var kategori in kategoriGruplari)
+    {
+         var kategoriAdi = kategori.FirstOrDefault().KATEGORI_ADI ?? "Kategori Yok";
+
+    <h5 style="margin-left: 20px;">📂 @kategoriAdi</h5>
+
+    <table class="table table-sm" style="margin-left: 20px;">
+        <thead>
+            <tr>
+                <th>Kitap Adı</th>
+                <th>Yazar</th>
+                <th>ISBN</th>
+                <th>Basım Yılı</th>
+                <th>Durum</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kitap in kategori)
+                {
+            <tr>
+                <td>@kitap.AD</td>
+                <td>@kitap.YAZAR</td>
+                <td>@kitap.ISBN</td>
+                <td>@kitap.BASIM_YILI</td>
+                <td>@kitap.DURUM</td>
+            </tr>
+                }
+        </tbody>
+    </table>
+    }
+</div>
+}
+
+<!-- 🔧 JavaScript: sadece seçilen raf görünür -->
+<script>
+    document.getElementById("rafSelect").addEventListener("change", function () {
+        var secilenRaf = this.value;
+        var raflar = document.querySelectorAll(".raf-bolumu");
+
+        raflar.forEach(function (rafDiv) {
+            if (rafDiv.getAttribute("data-raf") === secilenRaf) {
+                rafDiv.style.display = "block";
+            } else {
+                rafDiv.style.display = "none";
+            }
+        });
+    });
+</script>

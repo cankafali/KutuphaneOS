@@ -1,0 +1,27 @@
+﻿@model KutuphaneMvc.Models.Entity.KATEGORI
+@{
+    ViewBag.Title = "Kategori Ekle";
+}
+
+<div class="card">
+    <div class="card-header"><h4>Yeni Kategori</h4></div>
+    <div class="card-body">
+        @using (Html.BeginForm("Create", "Kategori", FormMethod.Post))
+        {
+        @Html.AntiForgeryToken()
+
+        @* ID otomatikse gizli veya hiç koyma *@
+        @Html.HiddenFor(m => m.KATEGORI_ID)
+
+        <div class="form-group">
+            <label>Kategori Adı</label>
+            @Html.TextBoxFor(m => m.KATEGORI_ADI /* veya KATEGORI_AD */,
+                new { @class = "form-control", placeholder = "Örn: Roman" })
+            @Html.ValidationMessageFor(m => m.KATEGORI_ADI /* veya KATEGORI_AD */, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        @Html.ActionLink("Geri", "Index", "Kategori", null, new { @class = "btn btn-secondary ml-2" })
+        }
+    </div>
+</div>

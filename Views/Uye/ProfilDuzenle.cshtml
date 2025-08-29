@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "ProfilDuzenle";
+}
+
+@model KutuphaneMvc.Models.Entity.UYE
+
+<h2>Bilgilerimi Düzenle</h2>
+
+@using (Html.BeginForm())
+{
+@Html.HiddenFor(m => m.UYE_ID)  <!-- Burası çok kritik -->
+
+<div class="form-group">
+    @Html.LabelFor(m => m.AD)
+    @Html.TextBoxFor(m => m.AD, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.SOYAD)
+    @Html.TextBoxFor(m => m.SOYAD, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.EMAIL)
+    @Html.TextBoxFor(m => m.EMAIL, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.TELEFON)
+    @Html.TextBoxFor(m => m.TELEFON, new { @class = "form-control" })
+</div>
+
+<button type="submit" class="btn btn-success">Kaydet</button>
+}

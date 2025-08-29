@@ -1,0 +1,59 @@
+﻿@model IEnumerable<KutuphaneMvc.Models.Entity.View_ISTEK>
+@{
+    ViewBag.Title = "İstekler";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>İstek Listesi</h4>
+    </div>
+    <div class="card-body">
+        @if (TempData["ok"] != null)
+        {
+            <div class="alert alert-success">@TempData["ok"]</div>
+        }
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Üye</th>
+                    <th>Kitap</th>
+                    <th>Tip</th>
+                    <th>Tarih</th>
+                    <th>Durum</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ISTEK_ID</td>
+                        <td>@item.UYE_AD   @item.UYE_SOYAD</td>
+                        <td>@item.AD</td>
+                        <td>@item.TIP</td>
+                        <td>@item.TARIH.ToString("dd.MM.yyyy")</td>
+
+                        <td>
+                            @if (item.DURUM == "Beklemede")
+                            {
+                                <a href="@Url.Action("Onayla", "Istek", new { id = item.ISTEK_ID })"
+                                   class="btn btn-success btn-sm">Onayla</a>
+                                <a href="@Url.Action("Reddet", "Istek", new { id = item.ISTEK_ID })"
+                                   class="btn btn-danger btn-sm">Reddet</a>
+                            }
+                            else if (item.DURUM == "Onaylandı")
+                            {
+                                <span class="badge badge-success">Onaylandı</span>
+                            }
+                            else if (item.DURUM == "Reddedildi")
+                            {
+                                <span class="badge badge-danger">Reddedildi</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

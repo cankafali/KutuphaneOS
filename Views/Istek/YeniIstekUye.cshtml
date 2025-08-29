@@ -1,0 +1,72 @@
+﻿@model KutuphaneMvc.Models.Entity.ISTEK
+@{
+    ViewBag.Title = "Yeni Kitap İsteği";
+}
+
+<div class="card">
+
+    @if (TempData["BanliUyari"] != null)
+    {
+        <div class="alert alert-warning">
+            @TempData["BanliUyari"]
+        </div>
+    }
+    <div class="card-header">
+        <h4>Yeni Kitap İsteği</h4>
+    </div>
+
+    <div class="card-body">
+        @using (Html.BeginForm("YeniIstekUye", "Istek", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- İstek Tipi -->
+            <div class="form-group">
+                <label>İstek Tipi</label>
+                @Html.DropDownListFor(m => m.TIP, new SelectList(new[]
+                {
+                    new { Value = "Emanet", Text = "Emanet İsteği" },
+                    new { Value = "Rezervasyon", Text = "Rezervasyon İsteği" }
+                }, "Value", "Text"), "Seçiniz", new { @class = "form-control", id = "istekTipi", required = "required" })
+            </div>
+
+            <!-- Emanet Kitapları -->
+            <div class="form-group" id="emanetKitapDiv" style="display:none;">
+                <label>Uygun Kitaplar (Müsait)</label>
+                @Html.DropDownListFor(m => m.KITAP_ID,
+                    (IEnumerable<SelectListItem>)ViewBag.EmanetKitaplar,
+                    "Kitap Seçiniz", new { @class = "form-control" })
+            </div>
+
+            <!-- Rezervasyon kitapları - DÜZELTME YAPILDI -->
+            <div class="form-group" id="rezKitapDiv" style="display:none;">
+                <label>Rezervasyon Yapılabilecek Kitaplar</label>
+                @Html.DropDownListFor(m => m.KITAP_ID,
+                    (IEnumerable<SelectListItem>)ViewBag.RezervasyonKitaplar,
+                    "Kitap Seçiniz", new { @class = "form-control" })
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">İstek Gönder</button>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#istekTipi').change(function () {
+                var selected = $(this).val();
+                if (selected === "Emanet") {
+                    $('#emanetKitapDiv').show();
+                    $('#rezKitapDiv').hide();
+                } else if (selected === "Rezervasyon") {
+                    $('#emanetKitapDiv').hide();
+                    $('#rezKitapDiv').show();
+                } else {
+                    $('#emanetKitapDiv').hide();
+                    $('#rezKitapDiv').hide();
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,4 @@
+body.sidebar-mini #sidebar-wrapper .sidebar-brand .logo-name,
+body.sidebar-collapse #sidebar-wrapper .sidebar-brand .logo-name {
+    display: none;
+}

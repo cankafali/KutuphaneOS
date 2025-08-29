@@ -1,0 +1,86 @@
+﻿@model IEnumerable<KutuphaneMvc.Models.Entity.View_RAF_KITAP>
+
+@{
+    ViewBag.Title = "Raf Transferi";
+    var raflar = ViewBag.Raflar as List<KutuphaneMvc.Models.Entity.RAF>;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Raf Transferi</h4>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Kitap Adı</th>
+                    <th>Mevcut Raf</th>
+                    <th>Yeni Raf</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kitap in Model)
+                {
+                    <tr>
+                        <td>@kitap.KITAP_ID</td>
+                        <td>@kitap.AD</td>
+                        <td>@kitap.RAF_AD</td>
+
+                        <td>
+                            @using (Html.BeginForm("RafTransfer", "Raf", FormMethod.Post))
+                            {
+                                @Html.Hidden("id", kitap.KITAP_ID)
+
+                                @Html.DropDownList(
+                                    "yenirafid",
+                                    new SelectList(raflar, "RAF_ID", "RAF_AD"),
+                                    "Raf Seçiniz",
+                                    new { @class = "form-control d-inline w-auto" }
+                                )
+
+                                <button type="submit" class="btn btn-primary btn-sm ml-2">
+                                    Transfer
+                                </button>
+                            }
+                        </td>
+                        <td>
+                            <!-- İstersen buraya başka işlemler (sil, düzenle) eklenebilir -->
+                        </td>
+                    </tr>
+                }
+                <div class="pagination-wrapper mt-3">
+                    <nav>
+                        <ul class="pagination">
+                            @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                            {
+                                if (i == ViewBag.Page)
+                                {
+                                    <li class="page-item active">
+                                        <span class="page-link">@i</span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("RafTransferIndex", new { page = i })">@i</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </nav>
+                </div>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (TempData["mesaj"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["mesaj"]
+    </div>
+}

@@ -1,0 +1,250 @@
+﻿@* _Layout.cshtml *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>LibraryOS</title>
+
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/css/app.min.css")' />
+    <!-- Template CSS -->
+    <link rel="stylesheet" href='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/css/style.css")' />
+    <link rel="stylesheet" href='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/css/components.css")' />
+    <!-- Custom style CSS -->
+    <link rel="stylesheet" href='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/css/custom.css")' />
+    <link rel='shortcut icon' type='image/x-icon' href='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/img/favicon.ico")' />
+
+    <!-- FIX: Bozuk DataTables CSS path'leri -->
+    <link rel="stylesheet" href='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/bundles/datatables/datatables.min.css")' />
+    <link rel="stylesheet" href='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css")' />
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    @RenderSection("Heads", required: false)
+</head>
+
+@{
+    var role = Session["Role"] != null ? Session["Role"].ToString() : "";
+}
+<body>
+    <div class="loader"></div>
+    <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+            <div class="navbar-bg"></div>
+
+            <nav class="navbar navbar-expand-lg main-navbar sticky">
+                <div class="form-inline mr-auto">
+                    <ul class="navbar-nav mr-3">
+                        <li>
+                            <a href="#" data-toggle="sidebar" class="nav-link nav-link-lg collapse-btn">
+                                <i data-feather="align-justify"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                                <i data-feather="maximize"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <form class="form-inline mr-auto">
+                                <div class="search-element">
+                                    <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="200">
+                                    <button class="btn" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+
+                <ul class="navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <!-- FIX: Kırık <a> -->
+                        <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                            <i data-feather="user"></i>
+                            <span class="d-sm-none d-lg-inline-block">@Session["AdSoyad"]</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right pullDown">
+                            <div class="dropdown-title">Hello @Session["AdSoyad"]</div>
+                            <a href="/Uye/Profil" class="dropdown-item has-icon">
+                                <i class="far fa-user"></i> Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href='@Url.Action("Logout","Account")' class="dropdown-item has-icon text-danger">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="main-sidebar sidebar-style-2">
+                <aside id="sidebar-wrapper">
+                    <div class="sidebar-brand">
+                        <!-- LOGO: Ana sayfa linki -->
+                        <a href='@Url.Action("Index","Home", new { area = "" })' class="d-block">
+                            <div class="logo-container" style="text-align: center; margin-top: 20px;">
+                                <img alt="LibraryOS"
+                                     src='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/img/FİNAL.png")'
+                                     class="header-logo"
+                                     style="width:150px;height:auto;display:block;margin:0 auto;" />
+                                <span class="logo-name" style="font-size:18px;font-weight:500;letter-spacing:.5px;display:block;margin-top:-30px;">
+                                    LibraryOS
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <ul class="sidebar-menu">
+                        <li class="menu-header">Main</li>
+
+                        <li class="dropdown">
+                            <a href='@Url.Action("Index","Home", new { area = "" })' class="nav-link">
+                                <i data-feather="monitor"></i><span>Anasayfa</span>
+                            </a>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="menu-toggle nav-link has-dropdown">
+                                <i data-feather="book"></i><span>Kitaplar</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href='@Url.Action("Index","Book")'>Tüm Kitaplar</a></li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li><a class="nav-link" href='@Url.Action("BookForm", "Book")'>Kitap Ekle</a></li>
+                                }
+                            </ul>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="menu-toggle nav-link has-dropdown">
+                                    <i data-feather="users"></i><span>Üyeler</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="nav-link" href='@Url.Action("Index", "Uye")'>Tüm Üyeler</a></li>
+                                    <li><a class="nav-link" href='@Url.Action("YeniUye", "Uye")'>Yeni Üye</a></li>
+                                    <li><a class="nav-link" href='@Url.Action("Aski", "Uye")'>Askıya Alınanlar</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a href="#" class="menu-toggle nav-link has-dropdown">
+                                    <i data-feather="list"></i><span>Raflar&Kategori</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="nav-link" href='@Url.Action("Index","Raf")'>Raf Listesi</a></li>
+                                    <li><a class="nav-link" href='@Url.Action("RafTransferIndex","Raf")'>Raf Transfer</a></li>
+                                    <li><a class="nav-link" href='@Url.Action("Index","Kategori")'>Kategori Listesi</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a href="#" class="menu-toggle nav-link has-dropdown">
+                                    <i data-feather="list"></i><span>İstekler</span>
+                                </a>
+                                <ul class="dropdown-menu">
+
+                                    <li><a class="nav-link" href='@Url.Action("Index","Istek")'>Onay bekleyen İstekeler</a></li>
+                                    <li><a class="nav-link" href='@Url.Action("YeniIstek","Istek")'>Yeni İstek</a></li>
+                                </ul>
+                            </li>
+
+                        }
+                        <li class="dropdown">
+                            <a href="#" class="menu-toggle nav-link has-dropdown">
+                                <i data-feather="repeat"></i><span>Ödünç İşlemleri</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href='@Url.Action("Index","Emanet")'>Aktif Ödünçler</a></li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li><a class="nav-link" href='@Url.Action("Emanet", "Emanet")'>Yeni Ödünç</a></li>
+                                    <li><a class="nav-link" href="/Emanet/Gecikenler">Gecikenler</a></li>
+                                }
+                            </ul>
+                        </li>
+
+                        @if (role == "2")  // ROLE_ID 2 = Üye
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="menu-toggle nav-link has-dropdown">
+                                    <i data-feather="file"></i><span>İsteklerim</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="nav-link" href='@Url.Action("YeniIstekUye", "Istek")'>Yeni İstek Gönder</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="menu-toggle nav-link has-dropdown">
+                                    <i data-feather="file-text"></i><span>Rezervasyonlar</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="nav-link" href="/Rezervasyon/Index">Aktif Rezervasyonlar</a></li>
+                                    <li><a class="nav-link" href="/Rezervasyon/YeniRezervasyon">Yeni Rezervasyon</a></li>
+                                    <li><a class="nav-link" href="#">Onay Bekleyener</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </aside>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <section class="section">
+                    <div class="section-body">
+                        @RenderBody()
+                    </div>
+                </section>
+            </div>
+
+            <footer class="main-footer">
+                <div class="footer-left">
+                    <a href="https://templateshub.net">Templateshub</a>
+                </div>
+                <div class="footer-right"></div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- General JS Scripts -->
+    <script src='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/js/app.min.js")'></script>
+    <!-- JS Libraries -->
+    <script src='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/bundles/datatables/datatables.min.js")'></script>
+    <script src='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js")'></script>
+    <script src='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/bundles/jquery-ui/jquery-ui.min.js")'></script>
+    <!-- Template JS File -->
+    <script src='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/js/scripts.js")'></script>
+    <!-- Custom JS File -->
+    <script src='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/js/custom.js")'></script>
+    <!-- Page Specific JS File -->
+    <script src='@Url.Content("~/Content/otika-bootstrap-admin-template/assets/js/page/datatables.js")'></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Feather icons -->
+    <script>if (window.feather) { feather.replace(); }</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.js-kitap-ara').select2({
+                placeholder: "Kitap ara...",
+                allowClear: true
+            });
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

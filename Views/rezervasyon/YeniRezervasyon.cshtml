@@ -1,0 +1,41 @@
+﻿@model IEnumerable<KutuphaneMvc.Models.Entity.KITAP>
+
+@{
+    ViewBag.Title = "Yeni Rezervasyon";
+}
+
+<h2>Ödünçte Olan Kitaplar</h2>
+
+@if (!Model.Any())
+{
+<div class="alert alert-info">Şu anda ödünçte olan kitap bulunmamaktadır.</div>
+}
+else
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Kitap Adı</th>
+            <th>Yazar</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var kitap in Model)
+            {
+        <tr>
+            <td>@kitap.AD</td>
+            <td>@kitap.YAZAR</td>
+            <td>
+                <form action="@Url.Action("RezervasyonYap", "Rezervasyon")" method="post">
+                    <input type="hidden" name="kitapId" value="@kitap.KITAP_ID" />
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-bookmark"></i> Rezerve Et
+                    </button>
+                </form>
+            </td>
+        </tr>
+            }
+    </tbody>
+</table>
+}

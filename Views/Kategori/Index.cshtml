@@ -1,0 +1,44 @@
+﻿@model List<KutuphaneMvc.Models.Entity.KATEGORI>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="card">
+    <div class="card-header"><h4>Kategoriler</h4></div>
+    <div class="card-body">
+        <a href="/Kategori/Create/" class=" btn btn-primary btn-sm">Yeni Kategori Ekle</a>
+        <div class="table-responsive">
+            <table class="table table-bordered table-md">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Kategori Adı</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model == null || !Model.Any())
+                    {
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">Kayıt yok.</td>
+                    </tr>
+                    }
+                    else
+                    {
+                        foreach (var k in Model)
+                        {
+                    <tr>
+                        <td>@k.KATEGORI_ID </td>
+                        <td>@k.KATEGORI_ADI</td>
+                        <td>
+                            <a href="/Kategori/KategoriForm/@k.KATEGORI_ID" class="btn btn-warning btn-sm">Güncelle</a>
+                            <a href="/Kategori/Delete/@k.KATEGORI_ID" class="btn btn-danger btn-sm">Sil</a>
+                        </td>
+                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@model List<KutuphaneMvc.Models.Entity.KITAP>
+@{
+    ViewBag.Title = "Kitaplar";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Tüm Kitaplar</h4>
+                    <a href="/Book/BookForm" class="btn btn-outline-success">Yeni Kitap</a>
+                </div>
+            }
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="table-1">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    ID
+                                </th>
+                                <th>Kitap Adı</th>
+                                <th>Yazar</th>
+                                <th>Barkod</th>
+                                <th>Basım Yılı</th>
+                                <th>Kategori</th>
+                                <th>Raf</th>
+                                <th>Durum</th>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <th>Action</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.KITAP_ID
+                                    </td>
+                                    <td>@item.AD</td>
+                                    <td> @item.YAZAR </td>
+                                    <td>
+                                        @item.ISBN
+                                    </td>
+                                    <td>@item.BASIM_YILI</td>
+                                    <td>
+                                        @item.KATEGORI_ID
+                                    </td>
+                                    <td>
+                                        @item.RAF_ID
+                                    </td>
+                                    <td>
+                                        <span class="badge @(item.DURUM == true ? "badge-success" : "badge-danger")">
+                                            @item.DurumText
+                                        </span>
+                                    </td>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <td>
+                                            <a href="/Book/BookForm/@item.KITAP_ID" class="btn btn-primary">Güncelle</a>
+                                            <a href="/Book/DeleteBook/@item.KITAP_ID" class="btn btn-danger">Sil</a>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

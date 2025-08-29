@@ -1,0 +1,76 @@
+﻿@model IEnumerable<KutuphaneMvc.Models.Entity.VW_Rezervasyon>
+@using KutuphaneMvc.Models.Enums
+
+@if (TempData["Error"] != null)
+{
+<div class="alert alert-danger" role="alert">
+    @TempData["Error"]
+</div>
+}
+@if (TempData["Ok"] != null)
+{
+<div class="alert alert-success" role="alert">
+    @TempData["Ok"]
+</div>
+}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>Kitap</th>
+            <th>Yazar</th>
+            <th>Talep Tarihi</th>
+            <th>Son Geçerlilik</th>
+            @if (User.IsInRole("Admin"))
+            {
+            <th>Kullanıcı</th>
+            }
+            <th>Durum</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+        <tr>
+            <td>@r.REZ_ID</td>
+            <td>@r.UYE_AD @r.SOYAD</td>
+            <td>@r.AD</td>
+            <td>@r.YAZAR</td>
+            <td>@String.Format("{0:dd.MM.yyyy}", r.TALEP_TARIH)</td>
+            <td>@String.Format("{0:dd.MM.yyyy}", r.SON_GECERLILIK)</td>
+            @if (User.IsInRole("Admin"))
+                {
+            <td>@r.UYE_AD @r.SOYAD (@r.EMAIL)</td>
+                }
+            <td>
+                @switch ((RezervasyonDurum)r.DURUM)
+                    {
+                        case RezervasyonDurum.Beklemede:
+                @:<span class="badge badge-warning">Beklemede</span>
+                            break;
+                        case RezervasyonDurum.Onaylandi:
+                @:<span class="badge badge-success">Onaylandı</span>
+                            break;
+                        case RezervasyonDurum.Iptal:
+                @:<span class="badge badge-danger">İptal</span>
+                            break;
+                        case RezervasyonDurum.SureBitti:
+                @:<span class="badge badge-secondary">Süresi Geçti</span>
+                            break;
+                        case RezervasyonDurum.TeslimAlindi:
+                @:<span class="badge badge-info">Teslim Alındı</span>
+                            break;
+                    }
+            <td>
+                <a href="@Url.Action("Onay", "Rezervasyon", new { id = r.REZ_ID })"
+                   class="btn btn-success btn-sm">
+                    <i class="fas fa-check"></i> Onayla
+                </a>
+            </td>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

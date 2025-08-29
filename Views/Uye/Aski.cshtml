@@ -1,0 +1,46 @@
+﻿@model List<KutuphaneMvc.Models.Entity.UYE>
+@{
+    ViewBag.Title = "Askıdaki Üyeler";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Askıdaki Üyeler</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ad</th>
+                        <th>Soyad</th>
+                        <th>Email</th>
+                        <th>Telefon</th>
+                        <th>Ceza Puanı</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var uye in Model)
+                    {
+                        var durum = uye.CEZA_PUAN >= 100 ? "Banlı" : "Askıda";
+                    <tr>
+                        <td>@uye.UYE_ID</td>
+                        <td>@uye.AD</td>
+                        <td>@uye.SOYAD</td>
+                        <td>@uye.EMAIL</td>
+                        <td>@uye.TELEFON</td>
+                        <td>@uye.CEZA_PUAN</td>
+                        <td>
+                            <span class="badge @(uye.CEZA_PUAN >= 100 ? "badge-danger" : "badge-warning")">
+                                @durum
+                            </span>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

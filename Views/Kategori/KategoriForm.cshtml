@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "KategoriForm";
+}
+
+@model KutuphaneMvc.Models.Entity.KATEGORI
+
+@using (Html.BeginForm("SaveKategori", "Kategori", FormMethod.Post))
+{
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.KATEGORI_ID)
+
+<div class="form-group">
+    <label>Kategori Adı</label>
+    @Html.TextBoxFor(m => m.KATEGORI_ADI, new { @class = "form-control", placeholder = "Örn: Roman" })
+    @Html.ValidationMessageFor(m => m.KATEGORI_ADI, "", new { @class = "text-danger" })
+</div>
+
+<button type="submit" class="btn btn-primary">Kaydet</button>
+@Html.ActionLink("Geri", "Index", "Kategori", null, new { @class = "btn btn-secondary ml-2" })
+}

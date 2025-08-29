@@ -1,0 +1,48 @@
+﻿@model IEnumerable<KutuphaneMvc.Models.Entity.EMANET>
+
+@{
+    ViewBag.Title = "Geciken Emanetler";
+}
+
+<h2>Geciken Emanetler</h2>
+
+@if (Model == null || !Model.Any())
+{
+<div class="alert alert-success">Şu an geciken emanet yok 👍</div>
+}
+else
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Emanet ID</th>
+            <th>Üye ID</th>
+            <th>Kitap ID</th>
+            <th>Alınış Tarihi</th>
+            <th>Planlanan Teslim</th>
+            <th>Gecikme (Gün)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model)
+            {
+        <tr>
+            <td>@e.EMANET1</td>
+            <td>@e.UYE_ID</td>
+            <td>@e.KITAP_ID</td>
+            <td>@String.Format("{0:dd.MM.yyyy}", e.ALINIS_TARIHI)</td>
+            <td>@String.Format("{0:dd.MM.yyyy}", e.TESLIM_TARIHI)</td>
+            <td class="text-danger">
+                @{
+                            var teslimTarihi = e.TESLIM_TARIHI ?? DateTime.Now;
+                            var gecikme = teslimTarihi.Date < DateTime.Now.Date
+                                ? (DateTime.Now - teslimTarihi).Days
+                                : 0;
+                }
+                @gecikme
+            </td>
+        </tr>
+            }
+    </tbody>
+</table>
+}
